@@ -4,6 +4,7 @@ import com.example.productservicenov24.dtos.FakeStoreProductDto;
 import com.example.productservicenov24.exceptions.ProductNotFoundException;
 import com.example.productservicenov24.models.Category;
 import com.example.productservicenov24.models.Product;
+import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
+@Primary
 public class FakeStoreProductService implements ProductService {
 
     RestTemplate restTemplate;
@@ -62,6 +64,11 @@ FakeStoreProductDto.class);
                         .execute("https://fakestoreapi.com/products/" + id, HttpMethod.PUT, requestCallback, responseExtractor)
                         .getBody();
         return convertFakeStoreProductDtoToProduct(fakeStoreProductDto1);
+    }
+
+    @Override
+    public Product createProduct(Product product) {
+        return null;
     }
 
     private Product convertFakeStoreProductDtoToProduct(FakeStoreProductDto fakeStoreProductDto) {

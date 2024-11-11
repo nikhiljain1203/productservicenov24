@@ -4,6 +4,9 @@ import com.example.productservicenov24.dtos.ProductNotFoundExceptionDto;
 import com.example.productservicenov24.exceptions.ProductNotFoundException;
 import com.example.productservicenov24.models.Product;
 import com.example.productservicenov24.services.ProductService;
+import com.example.productservicenov24.services.SelfProductService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +20,7 @@ public class ProductController {
 
     ProductService productService;
 
-    public ProductController(ProductService productService) {
+    public ProductController(@Qualifier("SelfProductService") ProductService productService) {
         this.productService = productService;
     }
 
@@ -46,6 +49,11 @@ public class ProductController {
     @PutMapping("/{id}")
     public Product replaceProduct(@PathVariable("id") Long id, @RequestBody Product product) {
         return productService.replaceProduct(id, product);
+    }
+
+    @PostMapping
+    public Product createProduct(@RequestBody Product product) {
+        return productService.createProduct(product);
     }
 
 //    @ExceptionHandler(ProductNotFoundException.class)
