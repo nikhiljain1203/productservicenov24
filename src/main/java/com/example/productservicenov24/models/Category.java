@@ -11,6 +11,10 @@ import java.util.List;
 @Entity
 public class Category extends BaseModel {
     String description;
+
+//    @ManyToMany
+//    List<Product> productList;
+
 //    @OneToMany(fetch = FetchType.EAGER)
 //    List<Product> productList;
 //    @OneToOne

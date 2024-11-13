@@ -1,10 +1,10 @@
 package com.example.productservicenov24.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -12,7 +12,15 @@ import lombok.Setter;
 public class Product extends BaseModel{
     String description;
     Double price;
-    @ManyToOne
-    //@JoinColumn
+    @ManyToOne(cascade = CascadeType.DETACH)
     Category category;
+    int qty;
+    int amount;
+
+//    @ManyToMany(mappedBy = "productList")
+//    List<Category> categoryList;
+
+//    @ManyToOne
+//    @JoinColumn
+//    Category category;
 }

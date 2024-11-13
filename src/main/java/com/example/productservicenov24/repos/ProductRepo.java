@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ProductRepo extends JpaRepository<Product, Long> {
 
-    Product findByIdIsNotNullAAndPriceGreaterThan();
+    //Product findByIdIsNotNullAAndPriceGreaterThan();
 
     //HQL
     @Query("select p.title as title, p.description as description from Product p where p.id = :id")

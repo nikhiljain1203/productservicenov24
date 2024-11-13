@@ -84,7 +84,7 @@ FakeStoreProductDto.class);
 
         Category category = new Category();
         category.setTitle(fakeStoreProductDto.getCategory());
-        product.setCategory(category);
+        //product.setCategory(category);
 
         return product;
     }
