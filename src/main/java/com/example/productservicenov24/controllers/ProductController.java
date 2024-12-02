@@ -5,6 +5,8 @@ import com.example.productservicenov24.exceptions.ProductNotFoundException;
 import com.example.productservicenov24.models.Product;
 import com.example.productservicenov24.services.ProductService;
 import com.example.productservicenov24.services.SelfProductService;
+import com.example.productservicenov24.services.TokenService;
+import org.hibernate.cache.spi.access.UnknownAccessTypeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -19,13 +21,23 @@ import java.util.List;
 public class ProductController {
 
     ProductService productService;
+    TokenService tokenService;
 
-    public ProductController(ProductService productService) {
+    public ProductController(ProductService productService,
+                             TokenService tokenService) {
         this.productService = productService;
+        this.tokenService = tokenService;
     }
 
     @GetMapping("/{id}")
-    public Product getProductById(@PathVariable("id") Long id) throws ProductNotFoundException {
+    public Product getProductById(
+            //@RequestHeader("Token") String token,
+            @PathVariable("id") Long id) throws ProductNotFoundException {
+
+//        if (!tokenService.validateToken(token)) {
+//            throw new UnknownAccessTypeException("User is not authorised");
+//        }
+
         Product product = null;
         //try {
             product = productService.getProductById(id);
