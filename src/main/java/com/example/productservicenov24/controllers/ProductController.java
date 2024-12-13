@@ -20,7 +20,7 @@ public class ProductController {
 
     ProductService productService;
 
-    public ProductController(@Qualifier("SelfProductService") ProductService productService) {
+    public ProductController(ProductService productService) {
         this.productService = productService;
     }
 

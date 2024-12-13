@@ -4,7 +4,9 @@ import com.example.productservicenov24.dtos.FakeStoreProductDto;
 import com.example.productservicenov24.exceptions.ProductNotFoundException;
 import com.example.productservicenov24.models.Category;
 import com.example.productservicenov24.models.Product;
+import com.example.productservicenov24.repos.ProductRepo;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -16,24 +18,34 @@ import javax.management.InstanceNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Service
 @Primary
 public class FakeStoreProductService implements ProductService {
 
     RestTemplate restTemplate;
+    RedisTemplate<String, Object> redisTemplate;
 
-    public FakeStoreProductService(RestTemplate restTemplate) {
+    public FakeStoreProductService(RestTemplate restTemplate,
+                                   RedisTemplate redisTemplate) {
         this.restTemplate = restTemplate;
+        this.redisTemplate = redisTemplate;
     }
     @Override
     public Product getProductById(Long id) throws ProductNotFoundException {
+        Product product = (Product) redisTemplate.opsForHash().get("PRODUCTS", "PRODUCT_" + id);
+        if(product != null) {
+            return product;
+        }
         FakeStoreProductDto fakeStoreProductDto = restTemplate.getForObject("https://fakestoreapi.com/products/" + id,
 FakeStoreProductDto.class);
         if(fakeStoreProductDto == null) {
             throw new ProductNotFoundException(100L, "Product not found for id:" + id);
         }
-        return convertFakeStoreProductDtoToProduct(fakeStoreProductDto);
+        product =  convertFakeStoreProductDtoToProduct(fakeStoreProductDto);
+        redisTemplate.opsForHash().put("PRODUCTS", "PRODUCT_" + id, product);
+        return product;
     }
 
     @Override
